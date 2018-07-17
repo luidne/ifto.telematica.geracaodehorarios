@@ -1,6 +1,6 @@
 package br.edu.ifto.telematica;
 
-import br.ifto.edu.telematica.FullTextIndex;
+import br.edu.ifto.telematica.FullTextIndex;
 import static org.hamcrest.core.IsEqual.equalTo;
 import org.junit.Test;
 import static org.junit.Assert.*;
