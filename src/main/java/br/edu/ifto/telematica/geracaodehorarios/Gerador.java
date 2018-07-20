@@ -1,9 +1,13 @@
 package br.edu.ifto.telematica.geracaodehorarios;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.neo4j.driver.v1.AuthTokens;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
 import org.neo4j.driver.v1.Session;
+import static org.neo4j.driver.v1.Values.parameters;
 
 /**
  *
@@ -41,7 +45,22 @@ public class Gerador {
     }
 
     public void gerar() {
-
+        try {
+            List<Long> ids = session.run(Scripts.RETURN_IDS_PROFESSOR)
+                    .list()
+                    .stream()
+                    .map(x -> x.get(0).asLong())
+                    .collect(Collectors.toList());
+            for (Long id : ids) {                
+                session.run(Scripts.GERAR, parameters("id", id));
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+    
+    public void avaliarSolucao(){
+        
     }
 
 }

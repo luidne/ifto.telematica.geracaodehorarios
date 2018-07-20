@@ -21,7 +21,7 @@ import org.neo4j.procedure.UserFunction;
  *
  * @author Luídne
  */
-public class GeraHorarios {
+public class ProcedureHorarios {
     
     @Context
     public GraphDatabaseService db;

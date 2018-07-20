@@ -108,18 +108,21 @@ public class Scripts {
             + "create(p5)<-[:restricao_horario]-(h5_11)";
 
     public static String DELETE = "MATCH (x) DETACH DELETE x";
+    
+    public static String RETURN_IDS_PROFESSOR = "MATCH (p:professor) RETURN ID(p)";    
 
     public static String GERAR = "// Gera horários para o professor e uma de suas disciplinas\n"
-            + "match (p:professor{name:'P1'})-[ma:ministra_aula]->(d:disciplina)-[:pertence]->(per:periodo)\n"
-            + "match (h:horario)\n"
-            + "where not (h)-[:restricao_horario]->(p) and not (h)-[:restricao_horario]->(per) and ma.dia IS NULL\n"
-            + "with collect(distinct h) as h, head(collect(d)) as d, head(collect(per)) as per, p, ma limit 1\n"
-            + "call telematica.gerar(h,d, d.ch) yield node\n"
+            + "MATCH (p:professor)-[ma:ministra_aula]->(d:disciplina)-[:pertence]->(per:periodo)\n"
+            + "WHERE ID(p)={id}"
+            + "MATCH (h:horario)\n"
+            + "WHERE NOT (h)-[:restricao_horario]->(p) AND NOT (h)-[:restricao_horario]->(per) AND ma.dia IS NULL\n"
+            + "WITH COLLECT(DISTINCT h) AS h, HEAD(COLLECT(d)) AS d, HEAD(COLLECT(per)) AS per, p, ma LIMIT 1\n"
+            + "CALL telematica.gerar(h,d, d.ch) YIELD node\n"
             + "//with *\n"
-            + "create (p)<-[x:restricao_horario]-(node)-[y:restricao_horario]->(per)\n"
-            + "with head(collect(node.dia)) as dia, ma, head(collect(node)) as inicio, last(collect(node)) as fim\n"
-            + "set ma.dia = dia, ma.inicio = inicio.inicio, ma.fim = fim.fim\n"
-            + "return *\n"
+            + "CREATE (p)<-[x:restricao_horario]-(node)-[y:restricao_horario]->(per)\n"
+            + "WITH HEAD(COLLECT(node.dia)) AS dia, ma, HEAD(COLLECT(node)) AS inicio, LAST(COLLECT(node)) AS fim\n"
+            + "SET ma.dia = dia, ma.inicio = inicio.inicio, ma.fim = fim.fim\n"
+            + "RETURN *\n"
             + "//return dia, inicio.inicio, fim.fim";
 
 }

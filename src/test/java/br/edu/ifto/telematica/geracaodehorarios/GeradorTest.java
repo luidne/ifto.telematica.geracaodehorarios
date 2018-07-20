@@ -34,6 +34,7 @@ public class GeradorTest {
     
     @Test
     public void naoFazNadaTest(){
+        instance.gerar();
         assertTrue(true);
     }
     
