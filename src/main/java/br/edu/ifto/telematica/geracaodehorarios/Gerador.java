@@ -8,6 +8,7 @@ import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
 import org.neo4j.driver.v1.Session;
 import static org.neo4j.driver.v1.Values.parameters;
+import org.neo4j.driver.v1.exceptions.NoSuchRecordException;
 
 /**
  *
@@ -51,7 +52,8 @@ public class Gerador {
                     .stream()
                     .map(x -> x.get(0).asLong())
                     .collect(Collectors.toList());
-            for (Long id : ids) {                
+            
+            for(Long id : ids) {
                 session.run(Scripts.GERAR, parameters("id", id));
             }
         } catch (Exception e) {
@@ -59,8 +61,12 @@ public class Gerador {
         }
     }
     
-    public void avaliarSolucao(){
-        
+    /**
+     * Verifica se todas disicplinas têm horário.
+     * @return true se não há disciplinas sem horário.
+     */
+    public boolean todasDisciplinasComHorarios(){
+        return !session.run(Scripts.TEM_DISCIPLINAS_SEM_HORARIO).single().get(0).asBoolean();
     }
 
 }

@@ -23,24 +23,27 @@ public class GeradorTest {
     }
     
     @AfterClass
-    public static void tearDownClass() {
-    }
+    public static void tearDownClass() {}
     
     @Before
     public void setUp() {
         System.out.println("[Inicializando] testes");
+        instance.limparTudo();
         instance.popular();
     }
     
     @Test
-    public void naoFazNadaTest(){
-        instance.gerar();
+    public void gerarSolucao(){
+        System.out.println("Gerando horários");
+        while(!instance.todasDisciplinasComHorarios()) {
+            instance.gerar();
+        }
         assertTrue(true);
     }
     
     @After
     public void tearDown() {
         System.out.println("[Finalizando] testes");        
-        instance.limparTudo();
+//        instance.limparTudo();
     }
 }
